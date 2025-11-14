@@ -1,10 +1,11 @@
 using BankAPI.DTOs.User;
+using BankAPI.Helpers;
 
 namespace BankAPI.Interfaces
 {
     public interface IUserService
     {
-        Task<NewUserDto?> RegisterAsync(RegisterUserDto registerUserDto);
-        Task<NewUserDto?> LoginAsync(LoginDto loginDto);
+        Task<Result<NewUserDto?>> RegisterAsync(RegisterUserDto registerUserDto);
+        Task<Result<NewUserDto?>> LoginAsync(LoginDto loginDto);
     }
 }

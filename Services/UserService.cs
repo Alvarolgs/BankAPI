@@ -1,8 +1,10 @@
 using BankAPI.DTOs.User;
+using BankAPI.Enums;
+using BankAPI.Helpers;
 using BankAPI.Interfaces;
 using BankAPI.Mappers;
 using BankAPI.Models;
-
+using BankAPI.Shared.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,41 +22,66 @@ namespace BankAPI.Services
             _signInManager = signInManager;
         }
 
-        public async Task<NewUserDto?> LoginAsync(LoginDto loginDto)
+        public async Task<Result<NewUserDto?>> LoginAsync(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user == null)
-                throw new Exception("Invalid credentials!");
+                return Result<NewUserDto?>.Failure(
+                    new Error(
+                        ErrorCodeEnum.InvalidCredentials,
+                        string.Format(ErrorMessages.InvalidCredentials, EntityNames.User)
+                    )
+                );
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded)
-                throw new Exception("Invalid credentials!");
+                return Result<NewUserDto?>.Failure(
+                    new Error(
+                        ErrorCodeEnum.InvalidCredentials,
+                        string.Format(ErrorMessages.InvalidCredentials, EntityNames.User)
+                    )
+                );
 
-            return user.ToNewUserDto(_tokenService.CreateToken(user));
+            return Result<NewUserDto?>.Success(user.ToNewUserDto(_tokenService.CreateToken(user)));
         }
 
-        public async Task<NewUserDto?> RegisterAsync(RegisterUserDto registerUserDto)
+        public async Task<Result<NewUserDto?>> RegisterAsync(RegisterUserDto registerUserDto)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == registerUserDto.Email.ToLower());
 
             if (user != null)
-                throw new Exception("Email already in use.");
+                return Result<NewUserDto?>.Failure(
+                    new Error(
+                        ErrorCodeEnum.InvalidCredentials,
+                        ErrorMessages.EmailInUse
+                    )
+                );
 
             var appUser = registerUserDto.ToAppUserFromRegisterUserDto();
 
             var createdUser = await _userManager.CreateAsync(appUser, registerUserDto.Password);
 
             if (!createdUser.Succeeded)
-                throw new Exception(string.Join(", ", createdUser.Errors.Select(e => e.Description)));
+                return Result<NewUserDto?>.Failure(
+                        new Error(
+                            ErrorCodeEnum.UnexpectedError,
+                            string.Join(", ", createdUser.Errors.Select(e => e.Description))
+                        )
+                    );
 
             var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
 
             if (!roleResult.Succeeded)
-                throw new Exception("Failed to assign user role.");
+                return Result<NewUserDto?>.Failure(
+                        new Error(
+                            ErrorCodeEnum.RegisterError,
+                            ErrorMessages.UserRoleNotAssigned
+                        )
+                    );
 
-            return appUser.ToNewUserDto(_tokenService.CreateToken(appUser));
+            return Result<NewUserDto?>.Success(appUser.ToNewUserDto(_tokenService.CreateToken(appUser)));
         }
     }
 }
