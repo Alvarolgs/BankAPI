@@ -1,6 +1,7 @@
 using BankAPI.Data;
 using BankAPI.Interfaces;
 using BankAPI.Models;
+using BankAPI.Repositories;
 using BankAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -47,6 +48,7 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -87,7 +89,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>(); 
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IClientService, ClientService>();
 
 var app = builder.Build();
 

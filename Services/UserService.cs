@@ -1,5 +1,6 @@
 using BankAPI.DTOs.User;
 using BankAPI.Interfaces;
+using BankAPI.Mappers;
 using BankAPI.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -31,12 +32,7 @@ namespace BankAPI.Services
             if (!result.Succeeded)
                 throw new Exception("Invalid credentials!");
 
-            return new NewUserDto
-            {
-                FullName = user.FullName,
-                Email = user.Email,
-                Token = _tokenService.CreateToken(user)
-            };
+            return user.ToNewUserDto(_tokenService.CreateToken(user));
         }
 
         public async Task<NewUserDto?> RegisterAsync(RegisterUserDto registerUserDto)
@@ -46,13 +42,7 @@ namespace BankAPI.Services
             if (user != null)
                 throw new Exception("Email already in use.");
 
-            var appUser = new AppUser
-            {
-                FullName  = registerUserDto.FullName,
-                UserName  = registerUserDto.Email,
-                Email     = registerUserDto.Email,
-                BirthDate = registerUserDto.BirthDate
-            };
+            var appUser = registerUserDto.ToAppUserFromRegisterUserDto();
 
             var createdUser = await _userManager.CreateAsync(appUser, registerUserDto.Password);
 
@@ -64,12 +54,7 @@ namespace BankAPI.Services
             if (!roleResult.Succeeded)
                 throw new Exception("Failed to assign user role.");
 
-            return new NewUserDto
-            {
-                FullName = appUser.FullName,
-                Email = appUser.Email,
-                Token = _tokenService.CreateToken(appUser)
-            };
+            return appUser.ToNewUserDto(_tokenService.CreateToken(appUser));
         }
     }
 }

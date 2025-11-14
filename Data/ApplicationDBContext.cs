@@ -15,6 +15,8 @@ namespace BankAPI.Data
         {
 
         }   
+
+        public DbSet<Client> Clients { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
