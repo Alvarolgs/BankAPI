@@ -143,3 +143,4 @@ C:\Users\alvar\OneDrive\Área de Trabalho\C#\BankAPI\obj\Debug\net8.0\refint\Ban
 C:\Users\alvar\OneDrive\Área de Trabalho\C#\BankAPI\obj\Debug\net8.0\BankAPI.pdb
 C:\Users\alvar\OneDrive\Área de Trabalho\C#\BankAPI\obj\Debug\net8.0\BankAPI.genruntimeconfig.cache
 C:\Users\alvar\OneDrive\Área de Trabalho\C#\BankAPI\obj\Debug\net8.0\ref\BankAPI.dll
+C:\Users\alvar\OneDrive\Área de Trabalho\C#\BankAPI\obj\Debug\net8.0\BankAPI.sourcelink.json
