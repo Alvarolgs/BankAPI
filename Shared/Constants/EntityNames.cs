@@ -9,5 +9,6 @@ namespace BankAPI.Shared.Constants
     {
         public const string User = "User";
         public const string Client = "Client";
+        public const string BankAccount = "Bank Account";
     }
 }
