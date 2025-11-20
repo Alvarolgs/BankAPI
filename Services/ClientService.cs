@@ -3,7 +3,6 @@ using BankAPI.Enums;
 using BankAPI.Helpers;
 using BankAPI.Interfaces;
 using BankAPI.Mappers;
-using BankAPI.Models;
 using BankAPI.Shared.Constants;
 
 namespace BankAPI.Services
@@ -34,62 +33,56 @@ namespace BankAPI.Services
             return Result<NewClientDto>.Success(newClient.ToNewClientDto());  
         }
 
-        public async Task<Result<Client>> Delete(int id)
+        public async Task<Result<ClientDto>> Delete(int id)
         {
             var existingClient = await _clientRepo.GetByIdAsync(id);
 
             if(existingClient == null)
-                return Result<Client>.Failure(
+                return Result<ClientDto>.Failure(
                     new Error(
                         ErrorCodeEnum.NotFound,
                         string.Format(ErrorMessages.NotFoundMessage, EntityNames.Client)
                     )
                 );
 
-            return Result<Client>.Success(await _clientRepo.DeleteAsync(existingClient));
+            var clientDeleted = await _clientRepo.DeleteAsync(existingClient);
+
+            return Result<ClientDto>.Success(clientDeleted.ToClientDto());
         }
 
-        public async Task<List<Client>> GetAll()
+        public async Task<List<ClientDto>> GetAll()
         {
-            return await _clientRepo.GetAllAsync();
+            var clientList = await _clientRepo.GetAllAsync();
+
+            return clientList.Select(c => c.ToClientDto()).ToList();
         }
 
-        public async Task<Result<Client>> GetByEmail(string email)
+        public async Task<Result<ClientDto>> GetByEmail(string email)
         {
-            var client = await _clientRepo.GetByEmailAsync(email);
-
-            if(client == null)
-                return Result<Client>.Failure(
-                    new Error(
-                        ErrorCodeEnum.NotFound,
-                        string.Format(ErrorMessages.NotFoundMessage, EntityNames.Client)
-                    )
-                );
-
-            return Result<Client>.Success(client);
+            throw new Exception();
         }
 
-        public async Task<Result<Client>> GetById(int id)
+        public async Task<Result<ClientDto>> GetById(int id)
         {
             var client = await _clientRepo.GetByIdAsync(id);
 
             if(client == null)
-                return Result<Client>.Failure(
+                return Result<ClientDto>.Failure(
                     new Error(
                         ErrorCodeEnum.NotFound,
                         string.Format(ErrorMessages.NotFoundMessage, EntityNames.Client)
                     )
                 );
 
-            return Result<Client>.Success(client);
+            return Result<ClientDto>.Success(client.ToClientDto());
         }
 
-        public async Task<Result<Client>> Update(int id, UpdateClientDto updateClientDto)
+        public async Task<Result<ClientDto>> Update(int id, UpdateClientDto updateClientDto)
         {
-            var client = await _clientRepo.GetByEmailAsync(updateClientDto.Email);
+            var client = await _clientRepo.GetByIdAsync(id);
 
             if(client == null)
-                return Result<Client>.Failure(
+                return Result<ClientDto>.Failure(
                     new Error(
                         ErrorCodeEnum.NotFound,
                         string.Format(ErrorMessages.NotFoundMessage, EntityNames.Client)
@@ -100,7 +93,9 @@ namespace BankAPI.Services
             client.Email = updateClientDto.Email;
             client.Phone = updateClientDto.Phone;
 
-            return Result<Client>.Success(await _clientRepo.UpdateAsync(client));
+            var updatedClient = await _clientRepo.UpdateAsync(client);
+
+            return Result<ClientDto>.Success(updatedClient.ToClientDto());
         }
     }
 }

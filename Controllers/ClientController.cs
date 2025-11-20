@@ -1,5 +1,4 @@
 using BankAPI.DTOs.Client;
-using BankAPI.Helpers;
 using BankAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,23 +61,6 @@ namespace BankAPI.Controllers
                 return BadRequest(new {message = ex.Message});
             }
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetById([FromBody] string email)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-//
-        //    try
-        //    {
-        //        var result = await _clientService.GetByEmail(email);
-        //        return result.IsSuccess ? Created(string.Empty, result.Value) : BadRequest(result.Error);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return BadRequest(new {message = ex.Message});
-        //    }
-        //}
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update([FromBody] UpdateClientDto updateClientDto, [FromRoute] int id)

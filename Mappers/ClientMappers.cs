@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BankAPI.DTOs.Client;
 using BankAPI.Models;
 
@@ -12,6 +8,16 @@ namespace BankAPI.Mappers
         public static NewClientDto ToNewClientDto(this Client client)
         {
             return new NewClientDto
+            {
+                Name = client.Name,
+                Email = client.Email,
+                Phone = client.Phone
+            };
+        }
+
+        public static ClientDto ToClientDto(this Client client)
+        {
+            return new ClientDto
             {
                 Name = client.Name,
                 Email = client.Email,
