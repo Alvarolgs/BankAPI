@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EI7vyyEnNWY=",
+  "dgSpecHash": "GbL7uZ/nlLw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\alvar\\OneDrive\\Área de Trabalho\\C#\\BankAPI\\BankAPI.csproj",
+  "projectFilePath": "C:\\Users\\alvar\\OneDrive\\Área de Trabalho\\Estudos\\C#\\BankAPI\\BankAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alvar\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\alvar\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

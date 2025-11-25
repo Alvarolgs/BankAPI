@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BankAPI.DTOs.BankAccount;
+using BankAPI.DTOs.User;
 using BankAPI.Models;
 
 namespace BankAPI.Mappers
@@ -15,7 +12,12 @@ namespace BankAPI.Mappers
             {
                 InvoiceClosingDate = bankAccount.InvoiceClosingDate,
                 InvoiceDueDate = bankAccount.InvoiceDueDate,
-                Balance = bankAccount.Balance
+                Balance = bankAccount.Balance,
+                AppUser = new AppUserDto
+                {
+                    FullName = bankAccount.AppUser.FullName,
+                    Email = bankAccount.AppUser.Email
+                }
             };
         }
         public static BankAccount ToBankAccountFromRegisterBankAccountDto(this RegisterBankAccountDto registerBankAccountDto, string appUserId)
