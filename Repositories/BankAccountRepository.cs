@@ -17,9 +17,6 @@ namespace BankAPI.Repositories
 
         public async Task<BankAccount> CreateAsync(BankAccount bankAccount)
         {
-            Console.WriteLine("-------------------------------------------------------------");
-            Console.WriteLine(bankAccount.AppUserId);
-            Console.WriteLine("-------------------------------------------------------------");
             await _context.BankAccounts.AddAsync(bankAccount);
             await _context.SaveChangesAsync();
 
@@ -36,7 +33,7 @@ namespace BankAPI.Repositories
 
         public async Task<BankAccount?> GetByUserIdAsync(string userId)
         {
-            return await _context.BankAccounts.FirstOrDefaultAsync(b => b.AppUserId == userId);
+            return await _context.BankAccounts.Include(b => b.AppUser).FirstOrDefaultAsync(b => b.AppUserId == userId);
         }
 
         public async Task<BankAccount> UpdateAsync(BankAccount bankAccount)

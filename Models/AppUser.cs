@@ -1,3 +1,4 @@
+using BankAPI.DTOs.User;
 using Microsoft.AspNetCore.Identity;
 
 namespace BankAPI.Models

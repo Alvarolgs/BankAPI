@@ -20,10 +20,6 @@ namespace BankAPI.Services
         {
             var existingBankAccount = await _bankAccountRepo.GetByUserIdAsync(appUserId);
 
-            Console.WriteLine("-------------------------------------------------------------");
-            Console.WriteLine(appUserId);
-            Console.WriteLine("-------------------------------------------------------------");
-
             if(existingBankAccount != null)
                 return Result<BankAccountDto>.Failure(
                     new Error(
